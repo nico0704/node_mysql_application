@@ -1,0 +1,13 @@
+CREATE TABLE PERSONS (
+	ID int NOT NULL,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Age int,
+    Occupation varchar(255),
+    PRIMARY KEY (ID)
+);
+
+INSERT INTO persons VALUES (0, "Milde", "Sven", 99, "Wissenschaftlicher Mitarbeiter");
+INSERT INTO persons VALUES (1, "Schroeder", "Nico", 24, "Student");
+INSERT INTO persons VALUES (2, "Stemporowski", "Patryk", 21, "Student");
+INSERT INTO persons VALUES (3, "Otterbein", "Moritz", 27, "Student");

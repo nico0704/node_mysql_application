@@ -1,0 +1,11 @@
+{
+  "name": "multimediasystems_2.2",
+  "version": "1.0.0",
+  "description": "node and mysql application",
+  "main": "app.js",
+  "author": "",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
+  }
+}
