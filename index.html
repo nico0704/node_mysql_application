@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <style>
+        body {
+            overflow-x: hidden;
+            font-family: arial, sans-serif;
+        }
         table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
@@ -15,19 +19,44 @@
         th,
         tr {
             border: 2px solid #000000;
-            text-align: left;
+            text-align: center;
             padding: 8px;
         }
+
         tr:nth-child(odd) {
             background-color: #dddddd;
         }
+
         th {
             color: white;
             background-color: #4d4d4d;
         }
 
         #sbmBtn {
-            margin-bottom: 2%;
+            margin-bottom: 10px;
+        }
+
+        #user_message {
+            font-family: arial, sans-serif;
+            width: 98%;
+            text-align: center;
+            font-size: 112%;
+            border: 3px solid rgb(36, 36, 36);
+            background-color: rgba(213, 213, 213, 0.563);
+            padding-top: 1.5%;
+            margin-bottom: 20px;
+            visibility:hidden;
+            resize: none;
+        }
+
+        #searchInput {
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 40%;
+            font-size: 16px;
+            padding: 12px 20px 12px 12px;
+            border: 1px solid rgb(136, 136, 136);
+            margin-bottom: 1%;
         }
     </style>
 </head>
@@ -54,16 +83,20 @@
                 <input id="occupation" type="text" />
             </li>
         </ol>
-        <input id="sbmBtn" type="submit" />
+        <input id="sbmBtn" type="submit"/>
     </form>
+    <textarea id="user_message"></textarea>
+    <input type="text" id="searchInput" onkeyup="filter()" placeholder="Search for last names..">
     <div id="table"></div>
 </body>
 
 <script>
     window.addEventListener("load", getAllPersons);
     // insert into database
-    document.getElementById('create_new_entry')?.addEventListener('submit', create_new_entry);
-    function create_new_entry() {
+    document.getElementById('create_new_entry').addEventListener('submit', create_new_entry);
+    function create_new_entry(e) {
+        e.preventDefault();
+        document.getElementById("user_message").style.visibility = "hidden";
         console.log("inserting into database...");
         let first_name = document.getElementById("first_name").value;
         let last_name = document.getElementById("last_name").value;
@@ -71,11 +104,18 @@
         let occupation = document.getElementById("occupation").value;
         let params = "FirstName=" + first_name + "&" + "LastName=" + last_name + "&" + "Age=" + age + "&" + "Occupation=" + occupation;
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "/insertPerson");
+        xhr.open("POST", "/insertPerson", true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
             if (this.status == 200) {
-                console.log("joooo");
+                document.getElementById("user_message").innerHTML = "Successfully inserted new entry into database";
+                document.getElementById("user_message").style.visibility = "visible";
+                console.log("Successfully inserted entry into database");
+                document.getElementById("first_name").value = "";
+                document.getElementById("last_name").value = "";
+                document.getElementById("age").value = "";
+                document.getElementById("occupation").value = "";
+                getAllPersons();
             } else {
                 console.log("did not work");
             }
@@ -84,7 +124,7 @@
     }
 
     // get all persons from database
-    document.getElementById("getPersons")?.addEventListener("click", getAllPersons);
+    document.getElementById("getPersons").addEventListener("click", getAllPersons);
     function getAllPersons() {
         console.log("getting all persons from database...");
         let xhr = new XMLHttpRequest();
@@ -94,7 +134,6 @@
             if (this.status == 200) {
                 let response = JSON.parse(xhr.response);
                 let html_fragment = "<table><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Occupation</th><th></th></tr>";
-                //console.log(response);
                 response.forEach(element => {
                     html_fragment += "<tr>";
                     html_fragment += "<td>" + element.ID + "</td>";
@@ -118,15 +157,36 @@
         console.log("deleting entry with ID=" + ID + "...");
         let xhr = new XMLHttpRequest();
         xhr.open("GET", "/deletePerson/" + ID, true);
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (this.status == 200) {
-                console.log("entry was successfully deleted");
+                document.getElementById("user_message").innerHTML = "Successfully deleted entry from database";
+                document.getElementById("user_message").style.visibility = "visible";
                 getAllPersons();
             } else {
                 console.log("entry could not be deleted");
             }
         }
         xhr.send();
+    }
+
+    function filter() {
+        document.getElementById("user_message").style.visibility = "hidden";
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     }
 </script>
 

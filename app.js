@@ -63,7 +63,7 @@ app.get("/createPersonsTable", (req, res) => {
 });
 
 // insert person
-app.post("/insertPerson", (req, res, next) => {
+app.post("/insertPerson", (req, res) => {
     let post = {
         FirstName: req.body.FirstName,
         LastName: req.body.LastName,
@@ -74,7 +74,7 @@ app.post("/insertPerson", (req, res, next) => {
     let query = db.query(sql, post, (err, result) => {
         if (err) throw err;
         console.log(result);
-        res.send(result);
+        res.status(200).send(result);
     });
 });
 
@@ -85,7 +85,7 @@ app.get("/getPersons", async (req, res) => {
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         console.log(results);
-        res.send(results);
+        res.status(200).send(results);
     });
 });
 
@@ -109,7 +109,7 @@ app.get("/deletePerson/:id", (req, res) => {
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         console.log(results);
-        res.send("person deleted");
+        res.status(200).send("person deleted");
     });
 });
 
