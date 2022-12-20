@@ -6,7 +6,6 @@ const { readFile } = require("fs").promises;
 
 // create application/json parser
 var jsonParser = bodyParser.json();
-
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -18,7 +17,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "dXa_sql()->root0704",
+    password: "",
     database: "multimedia_test1",
 });
 
@@ -32,7 +31,7 @@ db.connect((error) => {
 
 // home
 app.get("/", async (req, res) => {
-    let html = await readFile("./index.html", "utf8");
+    let html = await readFile("./index.html", "utf-8");
     res.send(html);
 })
 
@@ -64,6 +63,9 @@ app.get("/createPersonsTable", (req, res) => {
 
 // insert person
 app.post("/insertPerson", (req, res) => {
+    if (!req.body.FirstName || !req.body.LastName || !req.body.Age || !req.body.Occupation) {
+        res.status(400).send("Bad request");
+    }
     let post = {
         FirstName: req.body.FirstName,
         LastName: req.body.LastName,
@@ -83,33 +85,28 @@ app.get("/getPersons", async (req, res) => {
     console.log("getpersons called");
     let sql = "SELECT * FROM persons2";
     let query = db.query(sql, (err, results) => {
-        if (err) throw err;
-        console.log(results);
-        res.status(200).send(results);
+        if (err) {
+            res.status(500).send("Something went wrong");
+            throw err;
+        } else {
+            console.log(results);
+            res.status(200).send(results);
+        }
     });
 });
-
-// change entry
-/*
-app.get("/changePerson/:id", (req, res) => {
-    let newName = "Jojo";
-    let sql = `UPDATE persons2 SET FirstName = "${newName}" WHERE ID = ${req.params.id}`;
-    let query = db.query(sql, (err, results) => {
-        if (err) throw err;
-        console.log(results);
-        res.send("person updated");
-    });
-});
-*/
 
 // delete entry
 app.get("/deletePerson/:id", (req, res) => {
     console.log("deleting entry with ID=" + req.params.id);
     let sql = `DELETE FROM persons2 WHERE ID = ${req.params.id}`;
     let query = db.query(sql, (err, results) => {
-        if (err) throw err;
-        console.log(results);
-        res.status(200).send("person deleted");
+        if (err) {
+            res.status(500).send("Something went wrong");
+            throw err;
+        } else {
+            console.log("entry successfully deleted");
+            res.status(200).send(results);
+        }
     });
 });
 

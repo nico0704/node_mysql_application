@@ -9,6 +9,7 @@
             overflow-x: hidden;
             font-family: arial, sans-serif;
         }
+
         table {
             font-family: arial, sans-serif;
             border-collapse: collapse;
@@ -42,10 +43,10 @@
             text-align: center;
             font-size: 112%;
             border: 3px solid rgb(36, 36, 36);
-            background-color: rgba(213, 213, 213, 0.563);
+            background-color: rgba(114, 167, 242, 0.563);
             padding-top: 1.5%;
             margin-bottom: 20px;
-            visibility:hidden;
+            visibility: hidden;
             resize: none;
         }
 
@@ -57,6 +58,42 @@
             padding: 12px 20px 12px 12px;
             border: 1px solid rgb(136, 136, 136);
             margin-bottom: 1%;
+        }
+
+        label {
+            padding: 12px 12px 12px 0;
+            display: inline-block;
+        }
+
+        input[type=text],
+        input[type="number"] {
+            width: 80%;
+            padding: 12px 20px;
+            margin: 2px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="number"] {
+            margin-left: 50px;
+        }
+
+        input[type=submit] {
+            width: 15%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 2px 0;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -83,7 +120,7 @@
                 <input id="occupation" type="text" />
             </li>
         </ol>
-        <input id="sbmBtn" type="submit"/>
+        <input id="sbmBtn" type="submit" />
     </form>
     <textarea id="user_message"></textarea>
     <input type="text" id="searchInput" onkeyup="filter()" placeholder="Search for last names..">
@@ -107,9 +144,10 @@
         xhr.open("POST", "/insertPerson", true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
+            const user_message = document.getElementById("user_message");
             if (this.status == 200) {
-                document.getElementById("user_message").innerHTML = "Successfully inserted new entry into database";
-                document.getElementById("user_message").style.visibility = "visible";
+                user_message.innerHTML = "Successfully inserted new entry into database";
+                user_message.style.visibility = "visible";
                 console.log("Successfully inserted entry into database");
                 document.getElementById("first_name").value = "";
                 document.getElementById("last_name").value = "";
@@ -117,7 +155,10 @@
                 document.getElementById("occupation").value = "";
                 getAllPersons();
             } else {
-                console.log("did not work");
+                console.log("could not insert new entry into database");
+                user_message.innerHTML = "Insert into database was not successful";
+                user_message.style.backgroundColor = rgb(255, 54, 54, 0.563);
+                user_message.style.visibility = "visible";
             }
         }
         xhr.send(params);
@@ -131,6 +172,7 @@
         xhr.open("GET", "/getPersons", true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
+            const user_message = document.getElementById("user_message");
             if (this.status == 200) {
                 let response = JSON.parse(xhr.response);
                 let html_fragment = "<table><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Occupation</th><th></th></tr>";
@@ -147,7 +189,10 @@
                 html_fragment += "</table>";
                 document.getElementById("table").innerHTML = html_fragment;
             } else {
-                console.log("did not work");
+                console.log("could not get data from database");
+                user_message.innerHTML = "Getting data from database was not successful";
+                user_message.style.backgroundColor = rgb(255, 54, 54, 0.563);
+                user_message.style.visibility = "visible";
             }
         }
         xhr.send();
@@ -158,12 +203,16 @@
         let xhr = new XMLHttpRequest();
         xhr.open("GET", "/deletePerson/" + ID, true);
         xhr.onload = function () {
+            const user_message = document.getElementById("user_message");
             if (this.status == 200) {
                 document.getElementById("user_message").innerHTML = "Successfully deleted entry from database";
                 document.getElementById("user_message").style.visibility = "visible";
                 getAllPersons();
             } else {
                 console.log("entry could not be deleted");
+                user_message.innerHTML = "Person could not be deleted";
+                user_message.style.backgroundColor = rgb(255, 54, 54, 0.563);
+                user_message.style.visibility = "visible";
             }
         }
         xhr.send();
