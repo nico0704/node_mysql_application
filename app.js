@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "dXa_sql()->root0704",
     database: "nodemysql",
 });
 
