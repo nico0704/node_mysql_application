@@ -65,6 +65,7 @@ app.get("/createPersonsTable", (req, res) => {
 app.post("/insertPerson", (req, res) => {
     if (!req.body.FirstName || !req.body.LastName || !req.body.Age || !req.body.Occupation) {
         res.status(400).send("Bad request");
+        return;
     }
     let post = {
         FirstName: req.body.FirstName,

@@ -101,36 +101,36 @@
 
 <body>
     <h1>Multimediasysteme 2.2</h1>
-    <form id="create_new_entry">
+    <form id="create_new_entry" >
         <ol>
             <li>
                 <label id="first_name_label" for="first_name">First Name</label>
-                <input id="first_name" type="text" />
+                <input id="first_name" type="text" onfocus="clear_user_msg();"/>
             </li>
             <li>
                 <label id="last_name_label" for="last_name">Last Name</label>
-                <input id="last_name" type="text" />
+                <input id="last_name" type="text" onfocus="clear_user_msg();"/>
             </li>
             <li>
                 <label id="age_label" for="age">Age</label>
-                <input id="age" type="number" />
+                <input id="age" type="number" onfocus="clear_user_msg();"/>
             </li>
             <li>
                 <label id="occupation_label" for="occupation">Occupation</label>
-                <input id="occupation" type="text" />
+                <input id="occupation" type="text" onfocus="clear_user_msg();"/>
             </li>
         </ol>
         <input id="sbmBtn" type="submit" />
     </form>
     <textarea id="user_message"></textarea>
-    <input type="text" id="searchInput" onkeyup="filter()" placeholder="Search for last names..">
+    <input type="text" id="searchInput" onfocus="clear_user_msg();" onkeyup="filter()" placeholder="Search for last names..">
     <div id="table"></div>
 </body>
 
 <script>
     window.addEventListener("load", getAllPersons);
     // insert into database
-    document.getElementById('create_new_entry').addEventListener('submit', create_new_entry);
+    document.getElementById('create_new_entry')?.addEventListener('submit', create_new_entry);
     function create_new_entry(e) {
         e.preventDefault();
         document.getElementById("user_message").style.visibility = "hidden";
@@ -157,7 +157,7 @@
             } else {
                 console.log("could not insert new entry into database");
                 user_message.innerHTML = "Insert into database was not successful";
-                user_message.style.backgroundColor = rgb(255, 54, 54, 0.563);
+                user_message.style.backgroundColor = "rgb(255, 54, 54, 0.563)";
                 user_message.style.visibility = "visible";
             }
         }
@@ -165,7 +165,7 @@
     }
 
     // get all persons from database
-    document.getElementById("getPersons").addEventListener("click", getAllPersons);
+    document.getElementById("getPersons")?.addEventListener("click", getAllPersons);
     function getAllPersons() {
         console.log("getting all persons from database...");
         let xhr = new XMLHttpRequest();
@@ -191,7 +191,7 @@
             } else {
                 console.log("could not get data from database");
                 user_message.innerHTML = "Getting data from database was not successful";
-                user_message.style.backgroundColor = rgb(255, 54, 54, 0.563);
+                user_message.style.backgroundColor = "rgb(255, 54, 54, 0.563)";
                 user_message.style.visibility = "visible";
             }
         }
@@ -211,7 +211,7 @@
             } else {
                 console.log("entry could not be deleted");
                 user_message.innerHTML = "Person could not be deleted";
-                user_message.style.backgroundColor = rgb(255, 54, 54, 0.563);
+                user_message.style.backgroundColor = "rgb(255, 54, 54, 0.563)";
                 user_message.style.visibility = "visible";
             }
         }
@@ -219,7 +219,6 @@
     }
 
     function filter() {
-        document.getElementById("user_message").style.visibility = "hidden";
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("searchInput");
         filter = input.value.toUpperCase();
@@ -236,6 +235,12 @@
                 }
             }
         }
+    }
+
+    function clear_user_msg() {
+        const user_message = document.getElementById("user_message");
+        user_message.style.visibility = "hidden";
+        user_message.style.backgroundColor = "rgba(114, 167, 242, 0.563)";
     }
 </script>
 
