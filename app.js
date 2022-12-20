@@ -97,7 +97,7 @@ app.get("/getPersons", async (req, res) => {
             res.status(500).send("Something went wrong");
             throw err;
         } else {
-            console.log(results);
+            console.log(results.length + " entries found in database");
             res.status(200).send(results);
         }
     });

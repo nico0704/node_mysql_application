@@ -95,6 +95,12 @@
         input[type=submit]:hover {
             background-color: #45a049;
         }
+
+        input[type="button"] {
+            color:black;
+            background-color: rgba(255, 54, 54, 0.808);
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -183,7 +189,7 @@
                     html_fragment += "<td>" + element.LastName + "</td>";
                     html_fragment += "<td>" + element.Age + "</td>";
                     html_fragment += "<td>" + element.Occupation + "</td>";
-                    html_fragment += "<td><input type='button' value='Delete Row' onclick='delete_entry(" + element.ID + ")''></td>"
+                    html_fragment += "<td><input type='button' value='X' onclick='delete_entry(" + element.ID + ")''></td>"
                     html_fragment += "</tr>";
                 });
                 html_fragment += "</table>";
