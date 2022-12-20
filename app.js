@@ -14,11 +14,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // create connection
+// bitte hier user, password und ggf. database eintragen
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "multimedia_test1",
+    database: "",
 });
 
 // connect
@@ -28,12 +29,6 @@ db.connect((error) => {
     }
     console.log("MySql connected");
 });
-
-// home
-app.get("/", async (req, res) => {
-    let html = await readFile("./index.html", "utf-8");
-    res.send(html);
-})
 
 // Create db
 app.get("/createdb", (req, res) => {
@@ -51,14 +46,26 @@ app.get("/createdb", (req, res) => {
 // create table
 app.get("/createPersonsTable", (req, res) => {
     let sql =
-        "CREATE TABLE persons2 (ID int AUTO_INCREMENT, LastName varchar(255), FirstName varchar(255), Age int, Occupation varchar(255), PRIMARY KEY (ID));";
+        "CREATE TABLE PERSONS (ID int AUTO_INCREMENT, LastName varchar(255), FirstName varchar(255), Age int, Occupation varchar(255), PRIMARY KEY (ID));";
     db.query(sql, (err, result) => {
         if (err) {
             throw err;
         }
         console.log(result);
-        res.send("Persons2 table created");
+        res.send("PERSONS table created");
     });
+});
+
+// setup
+app.get("/setup", async (req, res) => {
+    let html = await readFile("./setup.html", "utf-8");
+    res.send(html);
+});
+
+// home
+app.get("/", async (req, res) => {
+    let html = await readFile("./index.html", "utf-8");
+    res.send(html);
 });
 
 // insert person
@@ -73,7 +80,7 @@ app.post("/insertPerson", (req, res) => {
         Age: req.body.Age,
         Occupation: req.body.Occupation,
     };
-    let sql = "INSERT INTO persons2 SET ?";
+    let sql = "INSERT INTO PERSONS SET ?";
     let query = db.query(sql, post, (err, result) => {
         if (err) throw err;
         console.log(result);
@@ -84,7 +91,7 @@ app.post("/insertPerson", (req, res) => {
 // select
 app.get("/getPersons", async (req, res) => {
     console.log("getpersons called");
-    let sql = "SELECT * FROM persons2";
+    let sql = "SELECT * FROM PERSONS";
     let query = db.query(sql, (err, results) => {
         if (err) {
             res.status(500).send("Something went wrong");
@@ -99,7 +106,7 @@ app.get("/getPersons", async (req, res) => {
 // delete entry
 app.get("/deletePerson/:id", (req, res) => {
     console.log("deleting entry with ID=" + req.params.id);
-    let sql = `DELETE FROM persons2 WHERE ID = ${req.params.id}`;
+    let sql = `DELETE FROM PERSONS WHERE ID = ${req.params.id}`;
     let query = db.query(sql, (err, results) => {
         if (err) {
             res.status(500).send("Something went wrong");
@@ -111,6 +118,6 @@ app.get("/deletePerson/:id", (req, res) => {
     });
 });
 
-app.listen("3000", () => {
-    console.log("Server started on port 3000");
+app.listen("8080", () => {
+    console.log("Server started on port 8080");
 });
