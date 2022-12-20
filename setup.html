@@ -11,6 +11,9 @@
     <h3>1. User & Password für MySql in app.js eintragen (Line 17 - 22)</h3>
     <h3>2. ggf. Module installieren (npm install --save body-parser express mysql xhr-request) & node app.js starten</h3>
     <h3>3. Datenbank erstellen (entweder selbst oder über Route: localhost:8080/createdb</h3>
+    <h4> !!! Achtung: Wenn die DB und ihr persons table (Schritt 5) über die Routen erstellt werden, empfiehlt es sich die App nicht per 
+        nodemon zu starten, sondern klassisch mit node app.js. Nach Schritt 3 dann stoppen und sobald Schritt 4 ausgeführt wurde, 
+        wieder starten mit node app.js. Mit nodemon hatte ich beim Testen des Setups ab und zu Probleme.</h4>
     <h3>4. Name der Datenbank in app.js bei "database" eintragen (falls DB über Route erstellt wurde heißt die neue DB "nodemysql")</h3>
     <h3>5. Persons Table erstellen über Route: localhost:8080/createPersonsTable oder das vorliegende SQL-Script (database_script.sql) ausführen, welches den PERSONS Table erstellt und 4 Beispieleinträge erstellt</h3>
     <h3>6. localhost:8080 aufrufen</h3>
