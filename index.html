@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th,
+        tr {
+            border: 2px solid #000000;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(odd) {
+            background-color: #dddddd;
+        }
+        th {
+            color: white;
+            background-color: #4d4d4d;
+        }
+
+        #sbmBtn {
+            margin-bottom: 2%;
+        }
+    </style>
+</head>
+
+
+<body>
+    <h1>Multimediasysteme 2.2</h1>
+    <form id="create_new_entry">
+        <ol>
+            <li>
+                <label id="first_name_label" for="first_name">First Name</label>
+                <input id="first_name" type="text" />
+            </li>
+            <li>
+                <label id="last_name_label" for="last_name">Last Name</label>
+                <input id="last_name" type="text" />
+            </li>
+            <li>
+                <label id="age_label" for="age">Age</label>
+                <input id="age" type="number" />
+            </li>
+            <li>
+                <label id="occupation_label" for="occupation">Occupation</label>
+                <input id="occupation" type="text" />
+            </li>
+        </ol>
+        <input id="sbmBtn" type="submit" />
+    </form>
+    <div id="table"></div>
+</body>
+
+<script>
+    window.addEventListener("load", getAllPersons);
+    // insert into database
+    document.getElementById('create_new_entry')?.addEventListener('submit', create_new_entry);
+    function create_new_entry() {
+        console.log("inserting into database...");
+        let first_name = document.getElementById("first_name").value;
+        let last_name = document.getElementById("last_name").value;
+        let age = document.getElementById("age").value;
+        let occupation = document.getElementById("occupation").value;
+        let params = "FirstName=" + first_name + "&" + "LastName=" + last_name + "&" + "Age=" + age + "&" + "Occupation=" + occupation;
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/insertPerson");
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (this.status == 200) {
+                console.log("joooo");
+            } else {
+                console.log("did not work");
+            }
+        }
+        xhr.send(params);
+    }
+
+    // get all persons from database
+    document.getElementById("getPersons")?.addEventListener("click", getAllPersons);
+    function getAllPersons() {
+        console.log("getting all persons from database...");
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "/getPersons", true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (this.status == 200) {
+                let response = JSON.parse(xhr.response);
+                let html_fragment = "<table><tr><th>First Name</th><th>Last Name</th><th>Age</th><th>Occupation</th></tr>";
+                //console.log(response);
+                response.forEach(element => {
+                    html_fragment += "<tr>"
+                    html_fragment += "<td>" + element.FirstName + "</td>";
+                    html_fragment += "<td>" + element.LastName + "</td>";
+                    html_fragment += "<td>" + element.Age + "</td>";
+                    html_fragment += "<td>" + element.Occupation + "</td>";
+                    html_fragment += "</tr>";
+                });
+                html_fragment += "</table>";
+                document.getElementById("table").innerHTML = html_fragment;
+            } else {
+                console.log("did not work");
+            }
+        }
+        xhr.send();
+    }
+</script>
+
+</html>
