@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "dXa_sql()->root0704",
     database: "multimedia_test1",
 });
 
@@ -104,7 +104,8 @@ app.get("/changePerson/:id", (req, res) => {
 
 // delete entry
 app.get("/deletePerson/:id", (req, res) => {
-    let sql = `DELETE FROM persons WHERE ID = ${req.params.id}`;
+    console.log("deleting entry with ID=" + req.params.id);
+    let sql = `DELETE FROM persons2 WHERE ID = ${req.params.id}`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         console.log(results);

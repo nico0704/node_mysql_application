@@ -93,20 +93,37 @@
         xhr.onload = function () {
             if (this.status == 200) {
                 let response = JSON.parse(xhr.response);
-                let html_fragment = "<table><tr><th>First Name</th><th>Last Name</th><th>Age</th><th>Occupation</th></tr>";
+                let html_fragment = "<table><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Occupation</th><th></th></tr>";
                 //console.log(response);
                 response.forEach(element => {
-                    html_fragment += "<tr>"
+                    html_fragment += "<tr>";
+                    html_fragment += "<td>" + element.ID + "</td>";
                     html_fragment += "<td>" + element.FirstName + "</td>";
                     html_fragment += "<td>" + element.LastName + "</td>";
                     html_fragment += "<td>" + element.Age + "</td>";
                     html_fragment += "<td>" + element.Occupation + "</td>";
+                    html_fragment += "<td><input type='button' value='Delete Row' onclick='delete_entry(" + element.ID + ")''></td>"
                     html_fragment += "</tr>";
                 });
                 html_fragment += "</table>";
                 document.getElementById("table").innerHTML = html_fragment;
             } else {
                 console.log("did not work");
+            }
+        }
+        xhr.send();
+    }
+
+    function delete_entry(ID) {
+        console.log("deleting entry with ID=" + ID + "...");
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "/deletePerson/" + ID, true);
+        xhr.onload = function() {
+            if (this.status == 200) {
+                console.log("entry was successfully deleted");
+                getAllPersons();
+            } else {
+                console.log("entry could not be deleted");
             }
         }
         xhr.send();
